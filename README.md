@@ -24,7 +24,7 @@ included (but could of course).
 I spent a day on the lab and this is what was done.
 
 - Using a custom datasource, the Hazelcast Queue to feed the DAG.
-- Wrapping the low-level DAG core API's in a "ProcessBuilder"
+- Wrapping the low-level DAG core API's in a `ProcessBuilder`
 - Creating a "pluginified" wrapper on top of the API's.
 - Added distributed tracing using Hazelcast topics.
 
@@ -49,7 +49,7 @@ https://docs.hazelcast.org/docs/jet/0.3.1/manual/Understanding_Jet_Architecture_
     
 ### Result
 
-Using the API's to build a distributed process
+Using the `ProcessBuilder` API's to build a distributed process
 
 ```kotlin
 fun process() {
@@ -94,7 +94,7 @@ digraph DAG {
 }
 ```
 
-Which can be visualized on [viz-js.com](http://viz-js.com/) and looks klike this
+Which can be visualized on [viz-js.com](http://viz-js.com/) and looks like this
 
 ![result](screenshot/graphviz.png)
 
