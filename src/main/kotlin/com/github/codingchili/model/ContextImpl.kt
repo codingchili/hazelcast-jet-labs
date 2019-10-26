@@ -8,12 +8,12 @@ import com.github.codingchili.process.ProcessContext
  * A very simple context, this is instantiated once per processor and reused during the
  * lifetime of the job, the context typically contains job configuration and helpful utilities.
  */
-class ProcessContextImpl : ProcessContext {
+class ContextImpl : ProcessContext {
 
     /**
      * Applies a simple transformation on the object being processed.
      */
-    fun transform(pojo: ObjectForProcessing): ObjectForProcessing {
+    fun transform(pojo: TestObject): TestObject {
         pojo.name = pojo.name + "_TRANSFORMED"
         return pojo
     }
@@ -21,7 +21,7 @@ class ProcessContextImpl : ProcessContext {
     /**
      * Performs a fake save operation on the element being processed.
      */
-    fun save(pojo: ObjectForProcessing) {
+    fun save(pojo: TestObject) {
         println("saved pojo $pojo")
     }
 }

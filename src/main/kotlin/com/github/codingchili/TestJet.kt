@@ -1,7 +1,7 @@
 package com.github.codingchili
 
-import com.github.codingchili.model.ObjectForProcessing
-import com.github.codingchili.model.ProcessContextImpl
+import com.github.codingchili.model.TestObject
+import com.github.codingchili.model.ContextImpl
 import com.github.codingchili.plugins.*
 import com.github.codingchili.process.impl.JetFactory
 import com.github.codingchili.process.impl.JetProcessBuilder.Companion.DISTRIBUTED_TRACING
@@ -23,8 +23,8 @@ fun process() {
     // use a factory to construct the process builder to decouple ourselves from Jet, the
     // process context can be used to provide contextual functionality to the processing plugins.
     // for example attaching properties to the process or exposing client API's.
-    val process = ProcessFactory.create<ProcessContextImpl, ObjectForProcessing>(
-        ProcessContextImpl::class.java
+    val process = ProcessFactory.create<ContextImpl, TestObject>(
+        ContextImpl::class.java
     )
     try {
         // set the name of the process.
@@ -51,9 +51,9 @@ fun process() {
 
         // these are some example test objects that will pass through the graph.
         val objects = listOf(
-            ObjectForProcessing("first"),
-            ObjectForProcessing("second"),
-            ObjectForProcessing("third")
+            TestObject("first"),
+            TestObject("second"),
+            TestObject("third")
         )
 
         // distributed tracing, can be used for realtime visualizations.

@@ -1,7 +1,7 @@
 package com.github.codingchili.plugins
 
-import com.github.codingchili.model.ObjectForProcessing
-import com.github.codingchili.model.ProcessContextImpl
+import com.github.codingchili.model.TestObject
+import com.github.codingchili.model.ContextImpl
 import com.github.codingchili.process.ProcessPlugin
 
 /**
@@ -12,9 +12,8 @@ import com.github.codingchili.process.ProcessPlugin
  *
  * This can probably be altered, with synchronization on the context etc.
  */
-class TestPluginJoin :
-    ProcessPlugin<ProcessContextImpl, ObjectForProcessing> {
-    override fun process(context: ProcessContextImpl, item: ObjectForProcessing): ObjectForProcessing {
+class TestPluginJoin : ProcessPlugin<ContextImpl, TestObject> {
+    override fun process(context: ContextImpl, item: TestObject): TestObject {
         println("processing ${item.name}")
         return item
     }

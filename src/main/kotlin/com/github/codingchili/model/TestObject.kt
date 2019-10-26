@@ -12,7 +12,7 @@ import java.util.HashSet
  * It is recommended to load the whole case tree in a POJO as the text content is typically
  * very small. This allows for extremely efficient modifications of the case during processing.
  */
-class ObjectForProcessing(name: String) : Serializable {
+class TestObject(name: String) : Serializable {
     var ref = "$/root/cases/stuff/"
     var name = "wowza"
     var objs: MutableSet<String> = HashSet()
