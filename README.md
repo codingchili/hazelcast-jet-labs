@@ -94,7 +94,7 @@ digraph DAG {
 }
 ```
 
-Which can be visualized on [viz-js.com](http://viz-js.com/) and looks klike this
+Which can be visualized on [viz-js.com](http://viz-js.com/) and looks like this
 
 ![result](screenshot/graphviz.png)
 
