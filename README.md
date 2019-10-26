@@ -1,4 +1,4 @@
-# hazelcast-jet-labs    
+# jet-pluginifier  
 
 Hazelcast jet is a distributed stream processing engine. It can be used for low-latency streaming of events.
 In this lab I'm evaluating if it can be used for processing cases/incoming messages in a case management system.
