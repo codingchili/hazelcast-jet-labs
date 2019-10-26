@@ -22,13 +22,17 @@ import java.util.concurrent.atomic.AtomicBoolean
  * The builder constructs a directed acyclic graph of plugins which any Object can be
  * passed through.
  */
-class JetProcessBuilder<Context : ProcessContext, Item : Serializable>(private val context: Class<Context>) :
-    ProcessBuilder<Context, Item> {
+class JetProcessBuilder<Context : ProcessContext, Item : Serializable>: ProcessBuilder<Context, Item> {
     private var processName = UUID.randomUUID().toString() // used to set up a distributed Hazelcast queue source.
     private val started = AtomicBoolean(false)
     private var current: Vertex? = null // the "current" vertex is the one #edge draws new edges from.
     private lateinit var root: Vertex // the root vertex is fed by a Hazelcast queue, it's wired to the first #vertex created.
     private val dag = DAG() // pojo that contains the vertices and edges of the graph.
+    private val context: Class<Context>
+
+    constructor(context: Class<Context>) {
+        this.context = context
+    }
 
     // note: this method may only be called once and it has the biggest side effect ever seen.
     //
