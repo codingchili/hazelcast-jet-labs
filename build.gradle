@@ -10,8 +10,8 @@ repositories {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    implementation 'com.hazelcast.jet:hazelcast-jet:3.2'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    compile 'com.hazelcast.jet:hazelcast-jet:3.2'
 }
 
 compileKotlin {
@@ -19,4 +19,16 @@ compileKotlin {
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+jar {
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'
+
+    manifest {
+        attributes "Main-Class": "com.github.codingchili.TestJetKt"
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
