@@ -1,4 +1,4 @@
-# hazelcast-jet-labs    
+# jet-pluginifier  
 
 Hazelcast jet is a distributed stream processing engine. It can be used for low-latency streaming of events.
 In this lab I'm evaluating if it can be used for processing cases/incoming messages in a case management system.
@@ -28,6 +28,8 @@ I spent a day on the lab and this is what was done.
 - Creating a "pluginified" wrapper on top of the API's.
 - Added distributed tracing using Hazelcast topics.
 
+Find the real API's [here](https://docs.hazelcast.org/docs/jet/0.7/manual/)
+
 
 ##### Stuff to think about
 
@@ -49,12 +51,25 @@ https://docs.hazelcast.org/docs/jet/0.3.1/manual/Understanding_Jet_Architecture_
     
 ### Result
 
+Plugins are implemented like this, in Kotlin
+
+```kotlin
+class TestPluginTransform : ProcessPlugin<ContextImpl, TestObject> {
+    override fun process(context: ContextImpl, item: TestObject): TestObject {
+        // the context in this case contains a method for transforming the given item. cool.
+        return context.transform(item)
+    }
+}
+```
+
 Using the `ProcessBuilder` API's to build a distributed process
 
 ```kotlin
 fun process() {
     // create a builder to create the process
-    val process = ProcessFactory.create<ProcessContextImpl, ObjectForProcessing>(ProcessContextImpl::class.java
+    val process = ProcessFactory.create<ContextImpl, TestObject>(
+        ContextImpl::class.java
+    )
     process.setName("MessageSource")
     
     process.vertex(TestPluginStartNode::class.java)
