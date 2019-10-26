@@ -22,8 +22,8 @@ import java.util.concurrent.atomic.AtomicBoolean
  * The builder constructs a directed acyclic graph of plugins which any Object can be
  * passed through.
  */
-class JetProcessBuilder<C : ProcessContext, E : Serializable>(private val context: Class<C>) :
-    ProcessBuilder<C, E> {
+class JetProcessBuilder<Context : ProcessContext, Item : Serializable>(private val context: Class<Context>) :
+    ProcessBuilder<Context, Item> {
     private var processName = UUID.randomUUID().toString() // used to set up a distributed Hazelcast queue source.
     private val started = AtomicBoolean(false)
     private var current: Vertex? = null // the "current" vertex is the one #edge draws new edges from.
@@ -32,7 +32,7 @@ class JetProcessBuilder<C : ProcessContext, E : Serializable>(private val contex
 
     // note: this method may only be called once and it has the biggest side effect ever seen.
     //
-    override fun setName(processName: String): ProcessBuilder<C, E> {
+    override fun setName(processName: String): ProcessBuilder<Context, Item> {
         this.processName = processName
 
         // the root vertex uses a custom stream source, in this case a Hazelcast queue.
@@ -40,9 +40,9 @@ class JetProcessBuilder<C : ProcessContext, E : Serializable>(private val contex
         root = dag.newVertex(
             processName,
             // a bit ironic how this 6-arg method is named convenient >.<
-            SourceProcessors.convenientSourceP<IQueue<E>, E, Any>(
+            SourceProcessors.convenientSourceP<IQueue<Item>, Item, Any>(
                 { ctx ->
-                    ctx.jetInstance().hazelcastInstance.getQueue<E>(processName)
+                    ctx.jetInstance().hazelcastInstance.getQueue<Item>(processName)
                 },
                 // when items are added to the buffer they are immediately emitted.
                 { queue, buffer -> buffer.add(queue.take()) },
@@ -65,7 +65,7 @@ class JetProcessBuilder<C : ProcessContext, E : Serializable>(private val contex
         return this
     }
 
-    override fun vertex(plugin: Class<out ProcessPlugin<C, E>>): ProcessBuilder<C, E> {
+    override fun vertex(plugin: Class<out ProcessPlugin<Context, Item>>): ProcessBuilder<Context, Item> {
         val first = current == null
         current = createOrGet(plugin) // sets the "current" vertex from which to draw edges from.
 
@@ -77,7 +77,7 @@ class JetProcessBuilder<C : ProcessContext, E : Serializable>(private val contex
         return this
     }
 
-    private fun createOrGet(plugin: Class<out ProcessPlugin<C, E>>): Vertex {
+    private fun createOrGet(plugin: Class<out ProcessPlugin<Context, Item>>): Vertex {
         // check if the vertex exists, if it does set it to the current.
         var vertex: Vertex? = dag.getVertex(plugin.simpleName)
 
@@ -86,7 +86,7 @@ class JetProcessBuilder<C : ProcessContext, E : Serializable>(private val contex
 
         // if the vertex does not already exist it's created.
         if (vertex == null) {
-            vertex = dag.newVertex(plugin.simpleName, Processors.mapP<E, E> { entry ->
+            vertex = dag.newVertex(plugin.simpleName, Processors.mapP<Item, Item> { entry ->
                 trace(plugin.name) // distributed tracing - pretty cool!
 
                 // create a new instance of the plugin and run it. (could use reflectasm+cache for this)
@@ -99,7 +99,7 @@ class JetProcessBuilder<C : ProcessContext, E : Serializable>(private val contex
         return vertex
     }
 
-    private fun createContextInstance(): C {
+    private fun createContextInstance(): Context {
         try {
             // instantiates the context reused between elements in the processor.
             return context.getConstructor().newInstance()
@@ -109,7 +109,7 @@ class JetProcessBuilder<C : ProcessContext, E : Serializable>(private val contex
 
     }
 
-    override fun edge(to: Class<out ProcessPlugin<C, E>>): ProcessBuilder<C, E> {
+    override fun edge(to: Class<out ProcessPlugin<Context, Item>>): ProcessBuilder<Context, Item> {
         // creates a distributed edge from the currently focused vertex to the given plugin.
         // reusing the vertex if the given plugin already has a vertex created.
         val vertex = createOrGet(to)
@@ -119,7 +119,7 @@ class JetProcessBuilder<C : ProcessContext, E : Serializable>(private val contex
         return this
     }
 
-    override fun submit(item: E): CompletableFuture<Void> {
+    override fun submit(item: Item): CompletableFuture<Void> {
         // adds a new item on the Hazelcast queue, this is emitted immediately onto the DAG.
         JetFactory.hazelInstance().getQueue<Any>(processName).add(item)
 

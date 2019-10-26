@@ -8,7 +8,7 @@ import java.io.Serializable
  * This is the plugin interface for the plugins that execute on the vertices/nodes.
  */
 @FunctionalInterface
-interface ProcessPlugin<C : ProcessContext, E : Serializable> {
+interface ProcessPlugin<Context : ProcessContext, Item : Serializable> {
 
     /**
      * Process the given item from the stream and return it as it should be
@@ -18,5 +18,5 @@ interface ProcessPlugin<C : ProcessContext, E : Serializable> {
      * @param item the item to apply processing to, a message, file, case etc.
      * @return the item to be forwarded to the next vertex in the graph.
      */
-    fun process(context: C, item: E): E
+    fun process(context: Context, item: Item): Item
 }

@@ -19,7 +19,7 @@ object ProcessFactory {
      * @param <E> the type of the items that are being processed in the graph.
      * @return a new process builder.
      */
-    fun <C : ProcessContext, E : Serializable> create(context: Class<C>): ProcessBuilder<C, E> {
+    fun <Context : ProcessContext, Item : Serializable> create(context: Class<Context>): ProcessBuilder<Context, Item> {
         return JetProcessBuilder(context)
     }
 }
