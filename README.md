@@ -132,7 +132,13 @@ gradlew jar
 Run with 
 
 ```console
-java -jar <jet-sample>.jar
+# create two distributed processing instances
+java -jar <jet-sample>.jar --instance
+java -jar <jet-sample>.jar --instance
+
+# create the instance that will start processing items.
+java -jar <jet-sample>.jar --process
+
 ```
 
 The following output should appear
@@ -226,62 +232,33 @@ okt. 26, 2019 7:21:45 EM com.hazelcast.jet.impl.JobExecutionService
 INFO: [10.0.75.1]:5701 [jet] [3.2] Execution plan for jobId=0356-8480-eac0-0001, jobName='0356-8480-eac0-0001', executionId=0356-8480-eac1-0001 initialized
 okt. 26, 2019 7:21:45 EM com.hazelcast.jet.impl.JobExecutionService
 INFO: [10.0.75.1]:5701 [jet] [3.2] Start execution of job '0356-8480-eac0-0001', execution 0356-8480-eac1-0001 from coordinator [10.0.75.1]:5701
-started processing first
-okt. 26, 2019 7:21:45 EM logging
-INFO: [10.0.75.1]:5701 [jet] [3.2] running plugin com.github.codingchili.plugins.TestPluginStartNode on machine DESKTOP-TDNIONG
-processing first_TRANSFORMED
-processing first_TRANSFORMED
-saved pojo name: first_TRANSFORMED, ref: $/root/cases/stuff/, objs: [two, three, one]
-saved pojo name: first_TRANSFORMED, ref: $/root/cases/stuff/, objs: [two, three, one]
-okt. 26, 2019 7:21:45 EM logging
-INFO: [10.0.75.1]:5701 [jet] [3.2] running plugin com.github.codingchili.plugins.TestPluginTransform on machine DESKTOP-TDNIONG
-okt. 26, 2019 7:21:45 EM logging
-INFO: [10.0.75.1]:5701 [jet] [3.2] running plugin com.github.codingchili.plugins.TestPluginValidate on machine DESKTOP-TDNIONG
-okt. 26, 2019 7:21:45 EM logging
-INFO: [10.0.75.1]:5701 [jet] [3.2] running plugin com.github.codingchili.plugins.TestPluginJoin on machine DESKTOP-TDNIONG
-okt. 26, 2019 7:21:45 EM logging
-INFO: [10.0.75.1]:5701 [jet] [3.2] running plugin com.github.codingchili.plugins.TestPluginJoin on machine DESKTOP-TDNIONG
-okt. 26, 2019 7:21:45 EM logging
-INFO: [10.0.75.1]:5701 [jet] [3.2] running plugin com.github.codingchili.plugins.TestPluginSave on machine DESKTOP-TDNIONG
-okt. 26, 2019 7:21:45 EM logging
-INFO: [10.0.75.1]:5701 [jet] [3.2] running plugin com.github.codingchili.plugins.TestPluginSave on machine DESKTOP-TDNIONG
-started processing second
-okt. 26, 2019 7:21:46 EM logging
-INFO: [10.0.75.1]:5701 [jet] [3.2] running plugin com.github.codingchili.plugins.TestPluginStartNode on machine DESKTOP-TDNIONG
-okt. 26, 2019 7:21:46 EM logging
-INFO: [10.0.75.1]:5701 [jet] [3.2] running plugin com.github.codingchili.plugins.TestPluginTransform on machine DESKTOP-TDNIONG
-processing second_TRANSFORMEDokt. 26, 2019 7:21:46 EM logging
-INFO: [10.0.75.1]:5701 [jet] [3.2] running plugin com.github.codingchili.plugins.TestPluginJoin on machine DESKTOP-TDNIONG
-
-okt. 26, 2019 7:21:46 EM logging
-INFO: [10.0.75.1]:5701 [jet] [3.2] running plugin com.github.codingchili.plugins.TestPluginValidate on machine DESKTOP-TDNIONG
-saved pojo name: second_TRANSFORMED, ref: $/root/cases/stuff/, objs: [two, three, one]okt. 26, 2019 7:21:46 EM logging
-INFO: [10.0.75.1]:5701 [jet] [3.2] running plugin com.github.codingchili.plugins.TestPluginSave on machine DESKTOP-TDNIONG
-
-processing second_TRANSFORMED
-okt. 26, 2019 7:21:46 EM logging
-INFO: [10.0.75.1]:5701 [jet] [3.2] running plugin com.github.codingchili.plugins.TestPluginJoin on machine DESKTOP-TDNIONG
-okt. 26, 2019 7:21:46 EM logging
-INFO: [10.0.75.1]:5701 [jet] [3.2] running plugin com.github.codingchili.plugins.TestPluginSave on machine DESKTOP-TDNIONG
-saved pojo name: second_TRANSFORMED, ref: $/root/cases/stuff/, objs: [two, three, one]
-started processing third
-okt. 26, 2019 7:21:48 EM logging
-INFO: [10.0.75.1]:5701 [jet] [3.2] running plugin com.github.codingchili.plugins.TestPluginStartNode on machine DESKTOP-TDNIONG
-okt. 26, 2019 7:21:48 EM logging
-INFO: [10.0.75.1]:5701 [jet] [3.2] running plugin com.github.codingchili.plugins.TestPluginValidate on machine DESKTOP-TDNIONG
-processing third_TRANSFORMEDokt. 26, 2019 7:21:48 EM logging
-INFO: [10.0.75.1]:5701 [jet] [3.2] running plugin com.github.codingchili.plugins.TestPluginTransform on machine DESKTOP-TDNIONG
-
-okt. 26, 2019 7:21:48 EM logging
-INFO: [10.0.75.1]:5701 [jet] [3.2] running plugin com.github.codingchili.plugins.TestPluginJoin on machine DESKTOP-TDNIONG
-processing third_TRANSFORMEDokt. 26, 2019 7:21:48 EM logging
-INFO: [10.0.75.1]:5701 [jet] [3.2] running plugin com.github.codingchili.plugins.TestPluginJoin on machine DESKTOP-TDNIONG
-okt. 26, 2019 7:21:48 EM logging
-INFO: [10.0.75.1]:5701 [jet] [3.2] running plugin com.github.codingchili.plugins.TestPluginSave on machine DESKTOP-TDNIONG
-
-saved pojo name: third_TRANSFORMED, ref: $/root/cases/stuff/, objs: [two, three, one]okt. 26, 2019 7:21:48 EM logging
-INFO: [10.0.75.1]:5701 [jet] [3.2] running plugin com.github.codingchili.plugins.TestPluginSave on machine DESKTOP-TDNIONG
-
-saved pojo name: third_TRANSFORMED, ref: $/root/cases/stuff/, objs: [two, three, one]
+okt. 27, 2019 10:57:10 FM logging
+INFO: [10.0.75.1]:5703 [dev] [3.2] running plugin com.github.codingchili.plugins.TestPluginStartNode on machine DESKTOP-TDNIONG in jet_instance_52ebc00
+okt. 27, 2019 10:57:10 FM logging
+INFO: [10.0.75.1]:5703 [dev] [3.2] running plugin com.github.codingchili.plugins.TestPluginValidate on machine DESKTOP-TDNIONG in jet_instance_d3e0ce6
+okt. 27, 2019 10:57:10 FM logging
+INFO: [10.0.75.1]:5703 [dev] [3.2] running plugin com.github.codingchili.plugins.TestPluginTransform on machine DESKTOP-TDNIONG in jet_instance_d3e0ce6
+okt. 27, 2019 10:57:10 FM logging
+INFO: [10.0.75.1]:5703 [dev] [3.2] running plugin com.github.codingchili.plugins.TestPluginJoin on machine DESKTOP-TDNIONG in jet_instance_52ebc00
+okt. 27, 2019 10:57:10 FM logging
+INFO: [10.0.75.1]:5703 [dev] [3.2] running plugin com.github.codingchili.plugins.TestPluginJoin on machine DESKTOP-TDNIONG in jet_instance_52ebc00
+okt. 27, 2019 10:57:10 FM logging
+INFO: [10.0.75.1]:5703 [dev] [3.2] running plugin com.github.codingchili.plugins.TestPluginSave on machine DESKTOP-TDNIONG in jet_instance_d3e0ce6
+okt. 27, 2019 10:57:10 FM logging
+INFO: [10.0.75.1]:5703 [dev] [3.2] running plugin com.github.codingchili.plugins.TestPluginSave on machine DESKTOP-TDNIONG in jet_instance_6b0ce21
+okt. 27, 2019 10:57:11 FM logging
+INFO: [10.0.75.1]:5703 [dev] [3.2] running plugin com.github.codingchili.plugins.TestPluginStartNode on machine DESKTOP-TDNIONG in jet_instance_6b0ce21
+okt. 27, 2019 10:57:11 FM logging
+INFO: [10.0.75.1]:5703 [dev] [3.2] running plugin com.github.codingchili.plugins.TestPluginTransform on machine DESKTOP-TDNIONG in jet_instance_d3e0ce6
+okt. 27, 2019 10:57:11 FM logging
+INFO: [10.0.75.1]:5703 [dev] [3.2] running plugin com.github.codingchili.plugins.TestPluginJoin on machine DESKTOP-TDNIONG in jet_instance_d3e0ce6
+okt. 27, 2019 10:57:11 FM logging
+INFO: [10.0.75.1]:5703 [dev] [3.2] running plugin com.github.codingchili.plugins.TestPluginValidate on machine DESKTOP-TDNIONG in jet_instance_d3e0ce6
+okt. 27, 2019 10:57:11 FM logging
+INFO: [10.0.75.1]:5703 [dev] [3.2] running plugin com.github.codingchili.plugins.TestPluginSave on machine DESKTOP-TDNIONG in jet_instance_52ebc00
+okt. 27, 2019 10:57:11 FM logging
+INFO: [10.0.75.1]:5703 [dev] [3.2] running plugin com.github.codingchili.plugins.TestPluginJoin on machine DESKTOP-TDNIONG in jet_instance_d3e0ce6
+okt. 27, 2019 10:57:11 FM logging
+...
 ```
 

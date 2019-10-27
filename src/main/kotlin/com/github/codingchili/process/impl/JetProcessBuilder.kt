@@ -55,12 +55,12 @@ class JetProcessBuilder<Context : ProcessContext, Item : Serializable>: ProcessB
                 // used for snapshots - noop.
                 { _, _ -> },
                 // used to free up the context, in this case the Hazelcast queue.
-                // in this case we don't stop the job so it won't be called (?)
-                { it.destroy() },
+                // keep in mind that this will be called for each processor for distributed objects!
+                { },
                 // this has some special values, 0 means to only deploy the processor once.
                 1,
                 // not sure what this controls yet, as buffer#add immediately emits items.
-                true
+                false
             )
         )
         // as an alternative to a custom stream sourace it's possible to create a
@@ -94,8 +94,6 @@ class JetProcessBuilder<Context : ProcessContext, Item : Serializable>: ProcessB
                 trace(plugin.name) // distributed tracing - pretty cool!
 
                 // create a new instance of the plugin and run it. (could use reflectasm+cache for this)
-
-
                 val instance = plugin.getConstructor().newInstance()
                 instance.process(pc, entry)
             })
@@ -129,7 +127,7 @@ class JetProcessBuilder<Context : ProcessContext, Item : Serializable>: ProcessB
 
         // check if the Jet engine is started or not.
         return if (!started.getAndSet(true)) {
-            JetFactory.jetInstance().newJob(dag).future
+           JetFactory.jetInstance().newJob(dag).future
         } else {
             // for streaming jobs the future will never complete which is a bit sad.
             // batch jobs will probably be ineffective as they need to be deployed
@@ -154,5 +152,5 @@ fun trace(plugin: String) {
     // publish a trace event on the Hazelcast cluster topic :D
     JetFactory.hazelInstance()
         .getTopic<Any>(JetProcessBuilder.DISTRIBUTED_TRACING)
-        .publish("running plugin $plugin on machine ${InetAddress.getLocalHost().hostName}")
+        .publish("running $plugin on machine ${InetAddress.getLocalHost().hostName} in ${JetFactory.jetInstance().name}")
 }

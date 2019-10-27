@@ -14,7 +14,7 @@ import com.github.codingchili.process.ProcessPlugin
  */
 class TestPluginJoin : ProcessPlugin<ContextImpl, TestObject> {
     override fun process(context: ContextImpl, item: TestObject): TestObject {
-        println("processing ${item.name}")
+        //println("processing ${item.name}")
         return item
     }
 }

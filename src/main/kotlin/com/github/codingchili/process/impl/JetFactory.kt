@@ -1,8 +1,11 @@
 package com.github.codingchili.process.impl
 
+import com.hazelcast.config.Config
 import com.hazelcast.core.HazelcastInstance
 import com.hazelcast.jet.Jet
 import com.hazelcast.jet.JetInstance
+import com.hazelcast.jet.config.JetConfig
+import java.util.*
 
 /**
  * @author Robin Duda
@@ -12,6 +15,8 @@ import com.hazelcast.jet.JetInstance
 object JetFactory {
     @Transient
     private var jet: JetInstance? = null
+    @Transient
+    private val id = UUID.randomUUID().toString().substring(0,7)
 
     /**
      * @return the Jet instance if one exists, otherwise one is created.
@@ -20,7 +25,7 @@ object JetFactory {
         if (jet == null) {
             synchronized(javaClass) {
                 if (jet == null) {
-                    jet = Jet.newJetInstance()
+                    jet = Jet.newJetInstance(JetConfig().setHazelcastConfig(Config().setInstanceName("jet_instance_$id")))
                 }
             }
         }

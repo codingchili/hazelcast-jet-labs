@@ -12,7 +12,7 @@ import com.github.codingchili.process.ProcessPlugin
  */
 class TestPluginStartNode : ProcessPlugin<ContextImpl, TestObject> {
     override fun process(context: ContextImpl, item: TestObject): TestObject {
-        println("started processing ${item.name}")
+        //println("started processing ${item.name}")
         return item
     }
 }

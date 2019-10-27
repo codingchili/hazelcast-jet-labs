@@ -1,7 +1,7 @@
 package com.github.codingchili
 
-import com.github.codingchili.model.TestObject
 import com.github.codingchili.model.ContextImpl
+import com.github.codingchili.model.TestObject
 import com.github.codingchili.plugins.*
 import com.github.codingchili.process.impl.JetFactory
 import com.github.codingchili.process.impl.JetProcessBuilder.Companion.DISTRIBUTED_TRACING
@@ -15,8 +15,16 @@ import java.util.logging.Level
  */
 class TestJet
 
-fun main() {
-    process()
+fun main(args: Array<String>) {
+    when {
+        args.contains("--instance") -> { println("starting a passive instance"); instance() }
+        args.contains("--process") -> { println("starting a generator instance"); process() }
+        else -> println("use '--instance' to start a passive instance or '--process' to start processing items.")
+    }
+}
+
+fun instance() {
+    JetFactory.jetInstance()
 }
 
 fun process() {
@@ -49,13 +57,6 @@ fun process() {
         process.vertex(TestPluginJoin::class.java)
             .edge(TestPluginSave::class.java)
 
-        // these are some example test objects that will pass through the graph.
-        val objects = listOf(
-            TestObject("first"),
-            TestObject("second"),
-            TestObject("third")
-        )
-
         // distributed tracing, can be used for realtime visualizations.
         JetFactory.hazelInstance().getTopic<String>(DISTRIBUTED_TRACING)
             .addMessageListener {
@@ -63,11 +64,11 @@ fun process() {
                     .log(Level.INFO, it.messageObject)
             }
 
-        // put some objects for processing on the stream.
-        objects.forEach {
-            process.submit(it)
-            Thread.sleep(2000)
+        for (i in 0..100) {
+            process.submit(TestObject("test_$i"))
+            Thread.sleep(1000)
         }
+
     } finally {
         // shut down the jet instance to exit the jvm.
         process.shutdown()

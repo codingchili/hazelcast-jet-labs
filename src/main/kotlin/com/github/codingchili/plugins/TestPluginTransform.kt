@@ -11,7 +11,11 @@ import com.github.codingchili.process.ProcessPlugin
  */
 class TestPluginTransform : ProcessPlugin<ContextImpl, TestObject> {
     override fun process(context: ContextImpl, item: TestObject): TestObject {
-        // the context in this case contains a method for transforming the given item. cool.
+        // example: context could provide access to the hazel/jet instance.
+        //context.hazel().loggingService.getLogger("TestPluginTsf")
+        //    .log(Level.INFO, "running transform on object # ...")
+
+        // the context in this case contains a method for transforming the given item.
         return context.transform(item)
     }
 }
