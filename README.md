@@ -28,7 +28,7 @@ I spent a day on the lab and this is what was done.
 - Creating a "pluginified" wrapper on top of the API's.
 - Added distributed tracing using Hazelcast topics.
 
-Find the real API's [here](https://docs.hazelcast.org/docs/jet/0.7/manual/)
+Find the real API's [here](https://docs.hazelcast.org/docs/jet/3.2/manual/)
 
 
 ##### Stuff to think about
@@ -45,8 +45,11 @@ Find the real API's [here](https://docs.hazelcast.org/docs/jet/0.7/manual/)
 - Pipeline is easy to use, DAG is harder - "pluginified" is easiest.
 - jobs can be paused unpaused, with snapshot support.
 - DAG's can be checked for errors without starting Jet.
+- local vs distributed edges, local edges are probably always better in this scenario.
+- are there business cases that REALLY requires cycles in the graph?
+- calling blocking code requires the processor to yield. (see context/nonCooperative)
 
-https://docs.hazelcast.org/docs/jet/0.3.1/manual/Understanding_Jet_Architecture_and_API/Edge/Forwarding_Patterns.html
+See, "edge forwarding patterns", "blocking processors", "custom data sources" etc in the manual.
 
     
 ### Result
